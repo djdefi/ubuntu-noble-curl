@@ -21,12 +21,8 @@ jobs:
       - name: Export and compress Docker container
         run: docker export noble.curl | gzip > noble-curl.tar.gz
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./noble-curl.tar.gz
-          asset_name: noble-curl.tar.gz
-          asset_content_type: application/gzip
+          files: noble-curl.tar.gz
